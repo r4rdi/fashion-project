@@ -34,7 +34,7 @@ export function LiveChatWidget() {
       
       {/* Chat Window */}
       {isOpen && (
-        <div className="bg-card w-[320px] md:w-[360px] h-[480px] rounded-2xl shadow-2xl border flex flex-col overflow-hidden mb-4 animate-in slide-in-from-bottom-5 fade-in duration-200">
+        <div className="bg-card w-[calc(100vw-32px)] md:w-[360px] h-[calc(100vh-120px)] max-h-[480px] rounded-2xl shadow-2xl border flex flex-col overflow-hidden mb-4 animate-in slide-in-from-bottom-5 fade-in duration-200">
           
           {/* Header */}
           <div className="bg-primary text-primary-foreground p-4 flex justify-between items-center shrink-0">

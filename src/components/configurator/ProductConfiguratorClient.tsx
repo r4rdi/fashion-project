@@ -2,8 +2,13 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Interactive3DViewer } from "./Interactive3DViewer";
+import dynamic from "next/dynamic";
 import { ConfiguratorUI } from "./ConfiguratorUI";
+
+const Interactive3DViewer = dynamic(
+  () => import("./Interactive3DViewer").then((mod) => mod.Interactive3DViewer),
+  { ssr: false, loading: () => <div className="animate-pulse w-full h-full bg-zinc-100 dark:bg-zinc-900 rounded-xl" /> }
+);
 import { Button } from "@/components/ui/button";
 import { MeasurementModal } from "../measurement/MeasurementModal";
 import { useCartStore, MeasurementProfile } from "@/store/useCartStore";

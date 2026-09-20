@@ -43,13 +43,13 @@ function SuccessContent() {
         )}
 
         <div className="space-y-3 pt-6 border-t">
-          <Button size="lg" className="w-full rounded-full font-plus-jakarta gap-2" asChild>
-            <Link href="/tracker">
-              Live Production Tracker <ArrowRight className="w-4 h-4" />
+          <Button size="lg" className="w-full rounded-full font-plus-jakarta gap-2">
+            <Link href="/tracker" className="flex items-center w-full justify-center">
+              Live Production Tracker <ArrowRight className="w-4 h-4 ml-2" />
             </Link>
           </Button>
-          <Button size="lg" variant="outline" className="w-full rounded-full font-plus-jakarta" asChild>
-            <Link href="/catalog">
+          <Button size="lg" variant="outline" className="w-full rounded-full font-plus-jakarta">
+            <Link href="/catalog" className="w-full text-center">
               Continue Shopping
             </Link>
           </Button>

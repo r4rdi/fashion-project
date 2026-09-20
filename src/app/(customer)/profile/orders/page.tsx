@@ -34,8 +34,8 @@ export default function OrderHistoryPage() {
           <Package className="w-16 h-16 text-muted-foreground/30 mb-4" />
           <h2 className="text-2xl font-bold font-plus-jakarta mb-2">No orders yet</h2>
           <p className="text-muted-foreground mb-6">You haven't placed any made-to-order requests.</p>
-          <Button asChild className="rounded-full font-plus-jakarta">
-            <Link href="/catalog">Explore Catalog</Link>
+          <Button className="rounded-full font-plus-jakarta">
+            <Link href="/catalog" className="w-full h-full flex items-center justify-center px-4 py-2">Explore Catalog</Link>
           </Button>
         </div>
       ) : (
@@ -61,8 +61,8 @@ export default function OrderHistoryPage() {
                   </div>
                 </div>
                 
-                <Button variant="outline" size="sm" asChild className="rounded-full gap-2 whitespace-nowrap shrink-0">
-                  <Link href={`/tracker?orderId=${order.id}`}>
+                <Button variant="outline" size="sm" className="rounded-full shrink-0 p-0">
+                  <Link href={`/tracker?orderId=${order.id}`} className="flex items-center gap-2 whitespace-nowrap px-3 py-1.5 w-full h-full">
                     Track Production <ArrowRight className="w-4 h-4" />
                   </Link>
                 </Button>

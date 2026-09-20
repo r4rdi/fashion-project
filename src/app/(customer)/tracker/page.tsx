@@ -1,7 +1,7 @@
 "use client";
 
 import { Suspense, useState, useEffect } from "react";
-import { useOrderStore, OrderStatus } from "@/store/useOrderStore";
+import { useOrderStore, OrderStatus, Order } from "@/store/useOrderStore";
 import { Button } from "@/components/ui/button";
 import { Search, Scissors, PenTool, CheckCircle, PackageCheck, CreditCard } from "lucide-react";
 import Link from "next/link";
@@ -21,7 +21,7 @@ function TrackerContent() {
   const router = useRouter();
   
   const [searchId, setSearchId] = useState("");
-  const [searchedOrder, setSearchedOrder] = useState<ReturnType<typeof useOrderStore.getState.getOrder> | null>(null);
+  const [searchedOrder, setSearchedOrder] = useState<Order | null>(null);
   const [hasSearched, setHasSearched] = useState(false);
   
   const getOrder = useOrderStore(state => state.getOrder);

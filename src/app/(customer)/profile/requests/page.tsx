@@ -22,20 +22,22 @@ export default function CustomerRequestsPage() {
     // 2. Create an order in the order store
     addOrder({
       items: [{
+        id: `cst-${req.id}`,
         productId: req.id,
         productName: `Custom: ${req.title}`,
         color: "Custom",
         material: "Custom",
-        price: req.quotedPrice,
+        basePrice: req.quotedPrice || 0,
         measurements: req.measurements
       }],
-      totalAmount: req.quotedPrice,
+      totalAmount: req.quotedPrice || 0,
+      status: 'PAYMENT_RECEIVED',
+      createdAt: new Date().toISOString(),
       shippingDetails: {
         name: "Customer Name", // Mocked
         email: "customer@example.com",
         address: "123 Mock Street",
-        city: "Jakarta",
-        postalCode: "10000"
+        city: "Jakarta"
       }
     });
 

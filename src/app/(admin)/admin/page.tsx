@@ -141,8 +141,8 @@ export default function AdminDashboardPage() {
       <div className="bg-card border rounded-xl shadow-sm overflow-hidden">
         <div className="px-6 py-4 border-b flex justify-between items-center bg-muted/30">
           <h3 className="font-bold font-plus-jakarta">Recent Orders</h3>
-          <Button variant="outline" size="sm" asChild>
-            <Link href="/admin/orders">View All <ArrowRight className="w-4 h-4 ml-2" /></Link>
+          <Button variant="outline" size="sm">
+            <Link href="/admin/orders" className="flex items-center">View All <ArrowRight className="w-4 h-4 ml-2" /></Link>
           </Button>
         </div>
         

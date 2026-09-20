@@ -21,6 +21,7 @@ export default function CustomerRequestsPage() {
     
     // 2. Create an order in the order store
     addOrder({
+      id: `ORD-CST-${req.id.slice(0, 6)}`,
       items: [{
         id: `cst-${req.id}`,
         productId: req.id,

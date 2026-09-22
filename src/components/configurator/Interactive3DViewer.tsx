@@ -2,7 +2,7 @@
 
 import { Canvas } from "@react-three/fiber";
 import { Environment, ContactShadows, OrbitControls } from "@react-three/drei";
-import { PlaceholderGarment } from "../3d/PlaceholderGarment";
+import { GarmentModel } from "../3d/GarmentModel";
 import { Suspense, useRef } from "react";
 
 interface Interactive3DViewerProps {
@@ -23,7 +23,7 @@ export function Interactive3DViewer({ color, material }: Interactive3DViewerProp
         <spotLight position={[-5, 5, 5]} angle={0.2} penumbra={1} intensity={0.5} />
         
         <Suspense fallback={null}>
-          <PlaceholderGarment color={color} materialType={material} scrollProgress={staticProgress} />
+          <GarmentModel color={color} materialType={material} scrollProgress={staticProgress} isInteractive={true} />
           <Environment preset="city" />
           <ContactShadows position={[0, -1.5, 0]} opacity={0.5} scale={10} blur={2} far={4} />
         </Suspense>

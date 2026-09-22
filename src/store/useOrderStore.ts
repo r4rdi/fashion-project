@@ -3,12 +3,15 @@ import { persist } from 'zustand/middleware';
 import { CartItem } from './useCartStore';
 
 export type OrderStatus = 
+  | 'PENDING'
+  | 'PENDING_PAYMENT'
   | 'PAYMENT_RECEIVED' 
   | 'PATTERN_MAKING' 
   | 'CUTTING' 
   | 'SEWING' 
   | 'QUALITY_CONTROL' 
-  | 'SHIPPED';
+  | 'SHIPPED'
+  | 'CANCELLED';
 
 export interface Order {
   id: string;

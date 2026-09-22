@@ -2,10 +2,54 @@
 
 import { Canvas } from "@react-three/fiber";
 import { Environment, ContactShadows } from "@react-three/drei";
-import { PlaceholderGarment } from "./PlaceholderGarment";
+import { GarmentModel } from "./GarmentModel";
 import { ConfiguratorUI } from "../configurator/ConfiguratorUI";
 import { Suspense, useState, useRef } from "react";
 import { useScroll, useSpring, useMotionValueEvent } from "framer-motion";
+import { useFrame, useThree } from "@react-three/fiber";
+import * as THREE from "three";
+
+function CameraRig({ scrollProgress }: { scrollProgress: React.MutableRefObject<number> }) {
+  const { camera } = useThree();
+  const vec = new THREE.Vector3();
+  const lookAt = new THREE.Vector3(0, 0, 0);
+
+  useFrame(() => {
+    const p = scrollProgress.current;
+
+    // Scene 1: Introduction (0 - 0.25) -> Centered, zoomed out
+    // Scene 2: Silhouette (0.25 - 0.5) -> Side view, slightly lower
+    // Scene 3: Details (0.5 - 0.75) -> Zoomed in on torso/material
+    // Scene 4: Configurator (0.75 - 1.0) -> Shifted left to make room for UI
+
+    let targetX = 0;
+    let targetY = 0;
+    let targetZ = 6;
+    let lookX = 0;
+    let lookY = 0;
+
+    if (p < 0.25) {
+      targetZ = 6;
+    } else if (p < 0.5) {
+      targetY = -1;
+      targetZ = 5;
+    } else if (p < 0.75) {
+      targetY = 0.5; // Look at collar/chest
+      targetZ = 3;   // Zoom in
+      lookY = 0.5;
+    } else {
+      targetX = -1.5; // Shift camera left
+      targetZ = 5;
+    }
+
+    // Smoothly interpolate camera position and lookAt
+    camera.position.lerp(vec.set(targetX, targetY, targetZ), 0.05);
+    lookAt.lerp(new THREE.Vector3(lookX, lookY, 0), 0.05);
+    camera.lookAt(lookAt);
+  });
+
+  return null;
+}
 
 export function ScrollytellingCanvas() {
   const [color, setColor] = useState("#859183");
@@ -39,10 +83,11 @@ export function ScrollytellingCanvas() {
           <color attach="background" args={["#f4f4f5"]} />
           <ambientLight intensity={0.5} />
           <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} intensity={1} castShadow />
+          <CameraRig scrollProgress={scrollProgressRef} />
           
           <Suspense fallback={null}>
             {/* The 3D Scene */}
-            <PlaceholderGarment color={color} materialType={material} scrollProgress={scrollProgressRef} />
+            <GarmentModel color={color} materialType={material} scrollProgress={scrollProgressRef} />
             <Environment preset="city" />
             <ContactShadows position={[0, -1.5, 0]} opacity={0.4} scale={10} blur={2} far={4} />
           </Suspense>

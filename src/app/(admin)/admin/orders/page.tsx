@@ -2,13 +2,18 @@
 
 import { useOrderStore, OrderStatus } from "@/store/useOrderStore";
 import { useNotificationStore } from "@/store/useNotificationStore";
-import { useState } from "react";
-import { Package, User, MapPin } from "lucide-react";
+import { useState, useMemo } from "react";
+import { Package, User, MapPin, Search, Filter } from "lucide-react";
+import { Input } from "@/components/ui/input";
 
 export default function AdminOrdersPage() {
   const orders = useOrderStore(state => state.orders);
   const updateOrderStatus = useOrderStore(state => state.updateOrderStatus);
   const addNotification = useNotificationStore(state => state.addNotification);
+
+  // Search and filter state
+  const [searchQuery, setSearchQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState<OrderStatus | "ALL">("ALL");
 
   // Status options for the dropdown
   const STATUSES: { value: OrderStatus; label: string }[] = [
@@ -19,6 +24,16 @@ export default function AdminOrdersPage() {
     { value: 'QUALITY_CONTROL', label: 'Quality Control' },
     { value: 'SHIPPED', label: 'Shipped' },
   ];
+
+  const filteredOrders = useMemo(() => {
+    return orders.filter(order => {
+      const matchesSearch = 
+        order.id.toLowerCase().includes(searchQuery.toLowerCase()) || 
+        order.shippingDetails.name.toLowerCase().includes(searchQuery.toLowerCase());
+      const matchesStatus = statusFilter === "ALL" || order.status === statusFilter;
+      return matchesSearch && matchesStatus;
+    });
+  }, [orders, searchQuery, statusFilter]);
 
   const handleStatusChange = (orderId: string, newStatus: OrderStatus) => {
     updateOrderStatus(orderId, newStatus);
@@ -35,13 +50,40 @@ export default function AdminOrdersPage() {
   return (
     <div className="space-y-6">
       
-      <div>
-        <h1 className="text-3xl font-bold font-plus-jakarta tracking-tight">Order Management</h1>
-        <p className="text-muted-foreground mt-1">View incoming orders and update their production stages.</p>
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-3xl font-bold font-plus-jakarta tracking-tight">Order Management</h1>
+          <p className="text-muted-foreground mt-1">View incoming orders and update their production stages.</p>
+        </div>
+        
+        <div className="flex items-center gap-3">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+            <Input 
+              placeholder="Search ID or Name..." 
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-9 w-[250px]"
+            />
+          </div>
+          <div className="relative">
+            <Filter className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+            <select 
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value as OrderStatus | "ALL")}
+              className="pl-9 pr-4 py-2 text-sm border rounded-md bg-background focus:outline-none focus:ring-2 focus:ring-primary/20 appearance-none min-w-[160px]"
+            >
+              <option value="ALL">All Statuses</option>
+              {STATUSES.map(s => (
+                <option key={s.value} value={s.value}>{s.label}</option>
+              ))}
+            </select>
+          </div>
+        </div>
       </div>
 
       <div className="bg-card border rounded-xl shadow-sm overflow-hidden">
-        {orders.length === 0 ? (
+        {filteredOrders.length === 0 ? (
           <div className="p-12 text-center text-muted-foreground">
             No orders found in the system.
           </div>
@@ -57,7 +99,7 @@ export default function AdminOrdersPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-border">
-                {orders.map(order => (
+                {filteredOrders.map(order => (
                   <tr key={order.id} className="hover:bg-muted/20 transition-colors">
                     
                     {/* ID & Date */}
